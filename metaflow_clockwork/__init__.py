@@ -1,6 +1,6 @@
 # MetaFlow Clockwork v6
 from .engine import MetaTag, MetaTagType, ClockworkEngine
-from .events import EventSink, NoOpEventSink, StdoutEventSink
+from .events import EventSink, NoOpEventSink, RecordingEventSink, RecordedEvent, StdoutEventSink
 from .ledger_sink import LedgerEventSink
 
 __all__ = [
@@ -9,6 +9,8 @@ __all__ = [
     "ClockworkEngine",
     "EventSink",
     "NoOpEventSink",
+    "RecordedEvent",
+    "RecordingEventSink",
     "StdoutEventSink",
     "LedgerEventSink",
 ]

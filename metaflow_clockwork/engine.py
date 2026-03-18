@@ -4,11 +4,10 @@ MetaFlow Clockwork Engine v6
 Refactored with event emission and audit ledger support
 """
 
-import json
 import time
 import hashlib
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Callable, Set
+from typing import Dict, List, Any, Optional, Callable
 from enum import Enum
 from datetime import datetime
 
@@ -54,7 +53,8 @@ class MetaTag:
     def tick(self) -> List['MetaTag']:
         self.execution_count += 1
         spawned_tags = []
-        
+        existing_children = list(self.children)
+
         for func_name, func in self.functions.items():
             try:
                 result = func(self)
@@ -64,15 +64,13 @@ class MetaTag:
                     spawned_tags.extend([r for r in result if isinstance(r, MetaTag)])
             except Exception as e:
                 self._emit("metaflow.function.error", "error", func=func_name, error=str(e))
-        
-        for child in self.children:
+
+        # Children spawned during this tick begin executing on the next tick.
+        for child in existing_children:
             spawned_tags.extend(child.tick())
-        
+
         self.energy -= 0.1 * self.tick_rate
-        
-        if self.energy <= 0:
-            self._emit("metaflow.tag.exhausted", "info", tag_id=self.tag_id)
-        
+
         return spawned_tags
     
     def add_function(self, name: str, func: Callable):
@@ -81,9 +79,13 @@ class MetaTag:
     def spawn_child(self, child_type: MetaTagType, **kwargs) -> Optional['MetaTag']:
         if self.recursive_depth >= self.max_recursive_depth:
             return None
-            
+
+        if "max_recursive_depth" not in kwargs:
+            kwargs["max_recursive_depth"] = self.max_recursive_depth
+        if "tag_id" not in kwargs:
+            kwargs["tag_id"] = ""
+
         child = MetaTag(
-            tag_id="",
             tag_type=child_type,
             parent=self,
             recursive_depth=self.recursive_depth + 1,
@@ -196,38 +198,44 @@ class ClockworkEngine:
     def tick(self) -> Dict[str, Any]:
         self.tick_count += 1
         self.universal_time += 1.0 / 60
-        
+
         self._emit("metaflow.tick", "info", tick=self.tick_count, time=self.universal_time, root_gears=len(self.root_gears))
-        
+
         spawned_this_tick = []
-        
+
         for gear in self.root_gears:
             spawned = gear.tick()
             spawned_this_tick.extend(spawned)
-        
+
         for tag in spawned_this_tick:
             self._register_tag(tag)
             if tag.tag_type == MetaTagType.GEAR and tag.parent is None:
                 self.root_gears.append(tag)
-        
+
         if spawned_this_tick:
             self._emit("metaflow.spawn", "info", spawned=len(spawned_this_tick))
-        
-        self._cleanup_exhausted_tags()
-        
-        return {
+
+        exhausted = self._cleanup_exhausted_tags()
+
+        summary = {
             "tick": self.tick_count,
             "time": self.universal_time,
             "active_tags": len(self.all_tags),
+            "active_tag_ids": sorted(self.all_tags.keys()),
             "spawned": len(spawned_this_tick),
-            "root_gears": len(self.root_gears)
+            "spawned_tag_ids": [tag.tag_id for tag in spawned_this_tick],
+            "root_gears": len(self.root_gears),
+            "exhausted": exhausted,
         }
+        self._emit("metaflow.tick.summary", "info", **summary)
+        return summary
 
-    def _cleanup_exhausted_tags(self):
+    def _cleanup_exhausted_tags(self) -> int:
         exhausted = [tag_id for tag_id, tag in self.all_tags.items() if tag.energy <= 0]
         for tag_id in exhausted:
             tag = self.all_tags[tag_id]
-            if tag.parent:
+            if tag.parent and tag in tag.parent.children:
                 tag.parent.children.remove(tag)
             del self.all_tags[tag_id]
             self._emit("metaflow.tag.exhausted", "info", tag_id=tag_id)
+        return len(exhausted)
