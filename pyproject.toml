@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "metaflow-clockwork"
+version = "0.1.0"
+description = "Aurora-local deterministic execution package for MetaFlow Clockwork"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "httpx>=0.27,<1",
+]
+
+[project.scripts]
+metaflow-clockwork = "metaflow_clockwork.cli:main"
+
+[tool.setuptools]
+packages = ["metaflow_clockwork"]

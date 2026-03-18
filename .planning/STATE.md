@@ -2,8 +2,8 @@
 
 **Date:** 2026-03-18
 **Project:** MetaFlow Clockwork
-**Current phase:** Phase 5 - Packaging, Tests, And Release Readiness
-**Overall status:** Planning baseline, engine determinism, ledger compatibility, and QRBT bridge hardening are complete; packaging and release readiness are next.
+**Current phase:** Completed
+**Overall status:** Planning baseline, engine determinism, ledger compatibility, QRBT bridge hardening, and packaging/release readiness are complete for the current MetaFlow Clockwork roadmap.
 
 ## Phase Status
 
@@ -13,7 +13,7 @@
 | 2 | Engine And Event Determinism | Completed |
 | 3 | Ledger Compatibility And Auditability | Completed |
 | 4 | QRBT Bridge Contract Hardening | Completed |
-| 5 | Packaging, Tests, And Release Readiness | Planned |
+| 5 | Packaging, Tests, And Release Readiness | Completed |
 
 ## Notes
 
@@ -29,8 +29,12 @@
 - `.planning/BRIDGE_CONTRACT.md` records the stable Phase 4 authority seam and failure posture.
 - Bridge failures now raise `QRBTBridgeError` with status, command, and detail context instead of silent payload drift.
 - `tests/test_qrbt_bridge_phase4.py` now covers live bridge payload formation, unsupported args rejection, HTTP detail propagation, and result normalization.
+- `pyproject.toml` now defines the package metadata and `metaflow-clockwork` console script entry point.
+- `metaflow_clockwork/cli.py` and `metaflow_clockwork/__main__.py` now provide local `validate` and `bridge-envelope` commands.
+- `README.md` and `.planning/RELEASE_READINESS.md` document entry points, validation commands, and rollback posture.
+- `tests/test_cli_phase5.py` now covers the Phase 5 CLI and local validation surface.
 - The repo has untracked local noise and `.srclight` artifacts that were intentionally left untouched.
 
 ## Next Action
 
-- Document package entry points and release validation so the repo can close Phase 5 without widening the bridge surface.
+- Treat the current roadmap as complete unless a new milestone is opened.

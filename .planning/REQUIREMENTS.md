@@ -27,7 +27,7 @@
 
 - [x] **REP-01**: Repo-local `.planning` remains canonical for future work.
 - [x] **REP-02**: Basic unit tests cover engine, ledger sink, and bridge payload formation.
-- [ ] **REP-03**: Package entry points and validation steps are documented.
+- [x] **REP-03**: Package entry points and validation steps are documented.
 
 ## Out Of Scope
 
@@ -52,4 +52,4 @@
 | BRG-03 | Phase 4: QRBT Bridge Contract Hardening | Completed |
 | REP-01 | Phase 1: Repo Hygiene And Planning Baseline | Completed |
 | REP-02 | Phase 4: QRBT Bridge Contract Hardening | Completed |
-| REP-03 | Phase 5: Packaging, Tests, And Release Readiness | Planned |
+| REP-03 | Phase 5: Packaging, Tests, And Release Readiness | Completed |
