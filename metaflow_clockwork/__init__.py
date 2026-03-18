@@ -2,6 +2,7 @@
 from .engine import MetaTag, MetaTagType, ClockworkEngine
 from .events import EventSink, NoOpEventSink, RecordingEventSink, RecordedEvent, StdoutEventSink
 from .ledger_sink import LedgerEmitError, LedgerEventSink
+from .qrbt_bridge import QRBTBridge, QRBTBridgeError
 
 __all__ = [
     "MetaTag",
@@ -14,4 +15,6 @@ __all__ = [
     "StdoutEventSink",
     "LedgerEmitError",
     "LedgerEventSink",
+    "QRBTBridge",
+    "QRBTBridgeError",
 ]

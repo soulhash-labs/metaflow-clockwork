@@ -19,14 +19,14 @@
 
 ### QRBT Integration
 
-- [ ] **BRG-01**: Bridge payloads align with current live QRBT authority surfaces.
-- [ ] **BRG-02**: Bridge integration does not bypass QRBT or gateway control boundaries.
-- [ ] **BRG-03**: Bridge failure paths return actionable errors instead of silent drift.
+- [x] **BRG-01**: Bridge payloads align with current live QRBT authority surfaces.
+- [x] **BRG-02**: Bridge integration does not bypass QRBT or gateway control boundaries.
+- [x] **BRG-03**: Bridge failure paths return actionable errors instead of silent drift.
 
 ### Repo Readiness
 
 - [x] **REP-01**: Repo-local `.planning` remains canonical for future work.
-- [ ] **REP-02**: Basic unit tests cover engine, ledger sink, and bridge payload formation.
+- [x] **REP-02**: Basic unit tests cover engine, ledger sink, and bridge payload formation.
 - [ ] **REP-03**: Package entry points and validation steps are documented.
 
 ## Out Of Scope
@@ -47,9 +47,9 @@
 | LED-01 | Phase 3: Ledger Compatibility And Auditability | Completed |
 | LED-02 | Phase 3: Ledger Compatibility And Auditability | Completed |
 | LED-03 | Phase 3: Ledger Compatibility And Auditability | Completed |
-| BRG-01 | Phase 4: QRBT Bridge Contract Hardening | Planned |
-| BRG-02 | Phase 4: QRBT Bridge Contract Hardening | Planned |
-| BRG-03 | Phase 4: QRBT Bridge Contract Hardening | Planned |
+| BRG-01 | Phase 4: QRBT Bridge Contract Hardening | Completed |
+| BRG-02 | Phase 4: QRBT Bridge Contract Hardening | Completed |
+| BRG-03 | Phase 4: QRBT Bridge Contract Hardening | Completed |
 | REP-01 | Phase 1: Repo Hygiene And Planning Baseline | Completed |
-| REP-02 | Phase 5: Packaging, Tests, And Release Readiness | Planned |
+| REP-02 | Phase 4: QRBT Bridge Contract Hardening | Completed |
 | REP-03 | Phase 5: Packaging, Tests, And Release Readiness | Planned |
