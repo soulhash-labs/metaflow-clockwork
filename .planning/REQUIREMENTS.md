@@ -19,9 +19,9 @@
 
 ### Replay And Verification
 
-- [ ] **REPL-01**: Operator can inspect a run ledger and get summary information including run id, event count, and event kinds.
-- [ ] **REPL-02**: Operator can replay ledger events in recorded order from the CLI.
-- [ ] **REPL-03**: Package can verify `events.sha256` against `events.jsonl` and report mismatches clearly.
+- [x] **REPL-01**: Operator can inspect a run ledger and get summary information including run id, event count, and event kinds.
+- [x] **REPL-02**: Operator can replay ledger events in recorded order from the CLI.
+- [x] **REPL-03**: Package can verify `events.sha256` against `events.jsonl` and report mismatches clearly.
 
 ### Release Readiness
 
@@ -58,14 +58,14 @@
 | EXEC-01 | Phase 7: Spec-Driven Local Execution | Completed |
 | EXEC-02 | Phase 7: Spec-Driven Local Execution | Completed |
 | EXEC-03 | Phase 7: Spec-Driven Local Execution | Completed |
-| REPL-01 | Phase 8: Ledger Replay And Verification | Pending |
-| REPL-02 | Phase 8: Ledger Replay And Verification | Pending |
-| REPL-03 | Phase 8: Ledger Replay And Verification | Pending |
+| REPL-01 | Phase 8: Ledger Replay And Verification | Completed |
+| REPL-02 | Phase 8: Ledger Replay And Verification | Completed |
+| REPL-03 | Phase 8: Ledger Replay And Verification | Completed |
 | OPS-01 | Phase 9: Operator Docs And Hardening | Pending |
 | OPS-02 | Phase 9: Operator Docs And Hardening | Pending |
 
 **Coverage:**
 - v1.1 requirements: 11 total
-- Completed: 6
-- Pending: 5
+- Completed: 9
+- Pending: 2
 - Unmapped: 0

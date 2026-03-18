@@ -10,6 +10,7 @@ from typing import TextIO
 
 from .engine import ClockworkEngine, MetaTag, MetaTagType
 from .events import RecordingEventSink
+from .ledger_replay import replay_ledger, summarize_ledger, verify_ledger
 from .ledger_sink import LedgerEventSink
 from .qrbt_bridge import QRBTBridge
 from .run_spec import execute_run_spec, instantiate_run_spec, load_run_spec
@@ -58,6 +59,29 @@ def build_parser() -> argparse.ArgumentParser:
     spec_run.add_argument("--run-id", help="Override the spec run id")
     spec_run.add_argument("--request-id", help="Override the spec request id")
     spec_run.set_defaults(handler=_handle_spec_run)
+
+    ledger_summary = subparsers.add_parser(
+        "ledger-summary",
+        help="Summarize an emitted Aurora-style ledger run",
+    )
+    ledger_summary.add_argument("path", help="Run directory or ledger file path")
+    ledger_summary.set_defaults(handler=_handle_ledger_summary)
+
+    ledger_replay = subparsers.add_parser(
+        "ledger-replay",
+        help="Replay recorded ledger events in order",
+    )
+    ledger_replay.add_argument("path", help="Run directory or ledger file path")
+    ledger_replay.add_argument("--kind", help="Optional event type filter")
+    ledger_replay.add_argument("--limit", type=int, help="Optional maximum number of events to return")
+    ledger_replay.set_defaults(handler=_handle_ledger_replay)
+
+    ledger_verify = subparsers.add_parser(
+        "ledger-verify",
+        help="Verify a ledger hash chain against emitted events",
+    )
+    ledger_verify.add_argument("path", help="Run directory or ledger file path")
+    ledger_verify.set_defaults(handler=_handle_ledger_verify)
 
     return parser
 
@@ -179,6 +203,42 @@ def _handle_spec_run(args: argparse.Namespace, stdout: TextIO) -> int:
         "temporary_run_root": temporary_root,
         "spec_path": str(Path(args.path)),
         "execution": result.to_dict(),
+    }
+    json.dump(payload, stdout, indent=2, sort_keys=True)
+    stdout.write("\n")
+    return 0
+
+
+def _handle_ledger_summary(args: argparse.Namespace, stdout: TextIO) -> int:
+    summary = summarize_ledger(args.path)
+    payload = {
+        "ok": True,
+        "entry_point": "ledger-summary",
+        "summary": summary.to_dict(),
+    }
+    json.dump(payload, stdout, indent=2, sort_keys=True)
+    stdout.write("\n")
+    return 0
+
+
+def _handle_ledger_replay(args: argparse.Namespace, stdout: TextIO) -> int:
+    replay = replay_ledger(args.path, kind=args.kind, limit=args.limit)
+    payload = {
+        "ok": True,
+        "entry_point": "ledger-replay",
+        "replay": replay.to_dict(),
+    }
+    json.dump(payload, stdout, indent=2, sort_keys=True)
+    stdout.write("\n")
+    return 0
+
+
+def _handle_ledger_verify(args: argparse.Namespace, stdout: TextIO) -> int:
+    verification = verify_ledger(args.path)
+    payload = {
+        "ok": verification.ok,
+        "entry_point": "ledger-verify",
+        "verification": verification.to_dict(),
     }
     json.dump(payload, stdout, indent=2, sort_keys=True)
     stdout.write("\n")

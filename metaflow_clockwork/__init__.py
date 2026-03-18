@@ -1,6 +1,15 @@
 # MetaFlow Clockwork v6
 from .engine import MetaTag, MetaTagType, ClockworkEngine
 from .events import EventSink, NoOpEventSink, RecordingEventSink, RecordedEvent, StdoutEventSink
+from .ledger_replay import (
+    LedgerReplayError,
+    LedgerReplayResult,
+    LedgerSummary,
+    LedgerVerificationResult,
+    replay_ledger,
+    summarize_ledger,
+    verify_ledger,
+)
 from .ledger_sink import LedgerEmitError, LedgerEventSink
 from .qrbt_bridge import QRBTBridge, QRBTBridgeError
 from .run_spec import RunExecutionResult, RunSpec, RunSpecError, TagSpec, execute_run_spec, instantiate_run_spec, load_run_spec
@@ -17,8 +26,15 @@ __all__ = [
     "RecordedEvent",
     "RecordingEventSink",
     "StdoutEventSink",
+    "LedgerReplayError",
+    "LedgerReplayResult",
+    "LedgerSummary",
+    "LedgerVerificationResult",
     "LedgerEmitError",
     "LedgerEventSink",
+    "replay_ledger",
+    "summarize_ledger",
+    "verify_ledger",
     "QRBTBridge",
     "QRBTBridgeError",
     "RunExecutionResult",

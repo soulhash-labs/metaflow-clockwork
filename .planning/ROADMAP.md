@@ -43,6 +43,8 @@ Delivered:
 - Chain verification can detect mismatches between `events.jsonl` and `events.sha256`.
 - Replay behavior is covered by local tests.
 
+**Status:** Completed
+
 ## Phase 9: Operator Docs And Hardening
 
 **Goal:** Close the milestone with operator-facing docs, examples, and test coverage for the new runtime surface.

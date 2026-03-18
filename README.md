@@ -19,10 +19,16 @@ Executable entry points:
 - `python -m metaflow_clockwork bridge-envelope --profile-id <profile> --op <op>`
 - `python -m metaflow_clockwork spec-validate <path-to-spec.json>`
 - `python -m metaflow_clockwork spec-run <path-to-spec.json>`
+- `python -m metaflow_clockwork ledger-summary <run-dir-or-ledger-file>`
+- `python -m metaflow_clockwork ledger-replay <run-dir-or-ledger-file>`
+- `python -m metaflow_clockwork ledger-verify <run-dir-or-ledger-file>`
 - `metaflow-clockwork validate`
 - `metaflow-clockwork bridge-envelope --profile-id <profile> --op <op>`
 - `metaflow-clockwork spec-validate <path-to-spec.json>`
 - `metaflow-clockwork spec-run <path-to-spec.json>`
+- `metaflow-clockwork ledger-summary <run-dir-or-ledger-file>`
+- `metaflow-clockwork ledger-replay <run-dir-or-ledger-file>`
+- `metaflow-clockwork ledger-verify <run-dir-or-ledger-file>`
 
 ## Install
 
@@ -109,14 +115,44 @@ The command writes:
 
 under `<run_root>/<run_id>/`.
 
+## Ledger Summary, Replay, And Verification
+
+Summarize an emitted run ledger:
+
+```bash
+python -m metaflow_clockwork ledger-summary /tmp/metaflow-runs/run-phase7
+```
+
+Replay recorded events in ledger order:
+
+```bash
+python -m metaflow_clockwork ledger-replay /tmp/metaflow-runs/run-phase7 --kind metaflow.tick.summary --limit 2
+```
+
+Verify that `events.sha256` matches `events.jsonl`:
+
+```bash
+python -m metaflow_clockwork ledger-verify /tmp/metaflow-runs/run-phase7
+```
+
+These commands accept either:
+
+- the run directory
+- `events.jsonl`
+- `events.sha256`
+- `emit_failures.jsonl`
+
 ## Test Commands
 
 ```bash
-python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py
-python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6
+python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py tests/test_ledger_replay_phase8.py
+python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6 tests.test_ledger_replay_phase8
 python3 -m metaflow_clockwork validate
 python3 -m metaflow_clockwork spec-validate ./spec.json
 python3 -m metaflow_clockwork spec-run ./spec.json --run-root /tmp/metaflow-runs
+python3 -m metaflow_clockwork ledger-summary /tmp/metaflow-runs/<run_id>
+python3 -m metaflow_clockwork ledger-replay /tmp/metaflow-runs/<run_id> --kind metaflow.tick.summary
+python3 -m metaflow_clockwork ledger-verify /tmp/metaflow-runs/<run_id>
 ```
 
 ## Authority Boundaries

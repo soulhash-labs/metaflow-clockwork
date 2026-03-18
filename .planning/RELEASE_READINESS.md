@@ -37,16 +37,30 @@ Validates a local JSON run spec, applies deterministic defaults, and confirms th
 
 Executes a validated local JSON run spec into a ledger-backed run directory under the selected `run_root`.
 
+### `ledger-summary`
+
+Summarizes an emitted ledger and reports run id, event count, event kinds, and the latest hash.
+
+### `ledger-replay`
+
+Replays ledger events in recorded order with optional event-type filtering and output limits.
+
+### `ledger-verify`
+
+Recomputes the Aurora-style event chain and reports any drift between `events.jsonl` and `events.sha256`.
+
 ## Validation Commands
 
 ```bash
-python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py
-python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py
-python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6
+python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py tests/test_ledger_replay_phase8.py
+python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6 tests.test_ledger_replay_phase8
 python3 -m metaflow_clockwork validate
 python3 -m metaflow_clockwork spec-validate ./spec.json
 python3 -m metaflow_clockwork spec-run ./spec.json --run-root /tmp/metaflow-runs
 python3 -m metaflow_clockwork bridge-envelope --profile-id default --op audit
+python3 -m metaflow_clockwork ledger-summary /tmp/metaflow-runs/<run_id>
+python3 -m metaflow_clockwork ledger-replay /tmp/metaflow-runs/<run_id> --kind metaflow.tick.summary
+python3 -m metaflow_clockwork ledger-verify /tmp/metaflow-runs/<run_id>
 ```
 
 ## Rollback Posture
