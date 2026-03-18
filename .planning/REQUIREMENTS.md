@@ -13,9 +13,9 @@
 
 ### Local Execution
 
-- [ ] **EXEC-01**: CLI can execute a validated run-spec into a named local run directory without contacting QRBT.
-- [ ] **EXEC-02**: Spec-driven execution writes Aurora-style ledger artifacts for the resulting run.
-- [ ] **EXEC-03**: Operator can bound execution by an explicit tick limit from the CLI or run spec.
+- [x] **EXEC-01**: CLI can execute a validated run-spec into a named local run directory without contacting QRBT.
+- [x] **EXEC-02**: Spec-driven execution writes Aurora-style ledger artifacts for the resulting run.
+- [x] **EXEC-03**: Operator can bound execution by an explicit tick limit from the CLI or run spec.
 
 ### Replay And Verification
 
@@ -55,9 +55,9 @@
 | SPEC-01 | Phase 6: Run-Spec Contract And Validation | Completed |
 | SPEC-02 | Phase 6: Run-Spec Contract And Validation | Completed |
 | SPEC-03 | Phase 6: Run-Spec Contract And Validation | Completed |
-| EXEC-01 | Phase 7: Spec-Driven Local Execution | Pending |
-| EXEC-02 | Phase 7: Spec-Driven Local Execution | Pending |
-| EXEC-03 | Phase 7: Spec-Driven Local Execution | Pending |
+| EXEC-01 | Phase 7: Spec-Driven Local Execution | Completed |
+| EXEC-02 | Phase 7: Spec-Driven Local Execution | Completed |
+| EXEC-03 | Phase 7: Spec-Driven Local Execution | Completed |
 | REPL-01 | Phase 8: Ledger Replay And Verification | Pending |
 | REPL-02 | Phase 8: Ledger Replay And Verification | Pending |
 | REPL-03 | Phase 8: Ledger Replay And Verification | Pending |
@@ -66,6 +66,6 @@
 
 **Coverage:**
 - v1.1 requirements: 11 total
-- Completed: 3
-- Pending: 8
+- Completed: 6
+- Pending: 5
 - Unmapped: 0

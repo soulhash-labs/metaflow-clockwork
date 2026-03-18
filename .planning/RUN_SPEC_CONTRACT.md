@@ -94,3 +94,21 @@ python3 -m metaflow_clockwork spec-validate ./spec.json
 ```
 
 The command prints the normalized contract with defaults applied and confirms that registered function bindings can be instantiated into `MetaTag` trees.
+
+## Execution Entry Point
+
+```bash
+python3 -m metaflow_clockwork spec-run ./spec.json --run-root /tmp/metaflow-runs
+```
+
+Optional overrides:
+
+- `--tick-limit`
+- `--run-id`
+- `--request-id`
+
+Execution remains local:
+
+- validated spec only
+- Aurora-style ledger output under `<run_root>/<run_id>/`
+- no QRBT or gateway calls

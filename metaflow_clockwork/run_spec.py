@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
 from .engine import ClockworkEngine, MetaTag, MetaTagType
+from .ledger_sink import LedgerEventSink
 
 
 DEFAULT_RUN_ID_PREFIX = "metaflow_spec"
@@ -65,6 +66,34 @@ class RunSpec:
             "root_tags": [tag.to_dict() for tag in self.root_tags],
             "source_path": self.source_path,
             "known_functions": list(self.known_functions),
+        }
+
+
+@dataclass(frozen=True)
+class RunExecutionResult:
+    run_id: str
+    request_id: str
+    tick_limit: int
+    run_root: str
+    run_dir: str
+    events_path: str
+    chain_path: str
+    failures_path: str
+    root_tag_ids: list[str]
+    tick_summaries: list[dict[str, Any]]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "run_id": self.run_id,
+            "request_id": self.request_id,
+            "tick_limit": self.tick_limit,
+            "run_root": self.run_root,
+            "run_dir": self.run_dir,
+            "events_path": self.events_path,
+            "chain_path": self.chain_path,
+            "failures_path": self.failures_path,
+            "root_tag_ids": list(self.root_tag_ids),
+            "tick_summaries": list(self.tick_summaries),
         }
 
 
@@ -249,3 +278,73 @@ def instantiate_run_spec(spec: RunSpec, *, engine: ClockworkEngine | None = None
         return tag
 
     return [build_tag(root_spec, parent=None, recursive_depth=0) for root_spec in spec.root_tags]
+
+
+def execute_run_spec(
+    spec: RunSpec,
+    *,
+    run_root: str,
+    tick_limit: int | None = None,
+    run_id: str | None = None,
+    request_id: str | None = None,
+) -> RunExecutionResult:
+    resolved_tick_limit = spec.tick_limit if tick_limit is None else _validate_tick_limit(tick_limit)
+    resolved_run_id = str(run_id or spec.run_id).strip() or spec.run_id
+    resolved_request_id = str(request_id or spec.request_id).strip() or spec.request_id
+    resolved_spec = replace(
+        spec,
+        run_id=resolved_run_id,
+        request_id=resolved_request_id,
+        tick_limit=resolved_tick_limit,
+    )
+
+    ledger_sink = LedgerEventSink(run_root=run_root, run_id=resolved_spec.run_id)
+    engine = ClockworkEngine(
+        event_sink=ledger_sink,
+        run_id=resolved_spec.run_id,
+        request_id=resolved_spec.request_id,
+    )
+    root_tags = instantiate_run_spec(resolved_spec, engine=engine)
+    for root_tag in root_tags:
+        engine.add_root_gear(root_tag)
+
+    ledger_sink.emit(
+        "metaflow.run.start",
+        resolved_spec.run_id,
+        resolved_spec.request_id,
+        "info",
+        {
+            "source_path": resolved_spec.source_path,
+            "tick_limit": resolved_spec.tick_limit,
+            "root_tag_ids": [tag.tag_id for tag in root_tags],
+        },
+    )
+
+    summaries: list[dict[str, Any]] = []
+    for _ in range(resolved_spec.tick_limit):
+        summaries.append(engine.tick())
+
+    ledger_sink.emit(
+        "metaflow.run.complete",
+        resolved_spec.run_id,
+        resolved_spec.request_id,
+        "info",
+        {
+            "tick_limit": resolved_spec.tick_limit,
+            "ticks_executed": len(summaries),
+            "final_active_tags": summaries[-1]["active_tags"] if summaries else 0,
+        },
+    )
+
+    return RunExecutionResult(
+        run_id=resolved_spec.run_id,
+        request_id=resolved_spec.request_id,
+        tick_limit=resolved_spec.tick_limit,
+        run_root=str(Path(run_root)),
+        run_dir=str(ledger_sink.run_dir),
+        events_path=str(ledger_sink.events_path),
+        chain_path=str(ledger_sink.chain_path),
+        failures_path=str(ledger_sink.failures_path),
+        root_tag_ids=[tag.tag_id for tag in root_tags],
+        tick_summaries=summaries,
+    )

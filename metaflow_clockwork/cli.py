@@ -12,7 +12,7 @@ from .engine import ClockworkEngine, MetaTag, MetaTagType
 from .events import RecordingEventSink
 from .ledger_sink import LedgerEventSink
 from .qrbt_bridge import QRBTBridge
-from .run_spec import instantiate_run_spec, load_run_spec
+from .run_spec import execute_run_spec, instantiate_run_spec, load_run_spec
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -47,6 +47,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     spec_validate.add_argument("path", help="Path to the JSON run-spec file")
     spec_validate.set_defaults(handler=_handle_spec_validate)
+
+    spec_run = subparsers.add_parser(
+        "spec-run",
+        help="Execute a validated local JSON run-spec into a ledger-backed run directory",
+    )
+    spec_run.add_argument("path", help="Path to the JSON run-spec file")
+    spec_run.add_argument("--run-root", help="Ledger run root for execution output")
+    spec_run.add_argument("--tick-limit", type=int, help="Override the spec tick limit")
+    spec_run.add_argument("--run-id", help="Override the spec run id")
+    spec_run.add_argument("--request-id", help="Override the spec request id")
+    spec_run.set_defaults(handler=_handle_spec_run)
 
     return parser
 
@@ -146,6 +157,28 @@ def _handle_spec_validate(args: argparse.Namespace, stdout: TextIO) -> int:
         "spec": spec.to_dict(),
         "instantiated_root_tags": [tag.tag_id for tag in root_tags],
         "known_functions": sorted(engine.function_registry.keys()),
+    }
+    json.dump(payload, stdout, indent=2, sort_keys=True)
+    stdout.write("\n")
+    return 0
+
+
+def _handle_spec_run(args: argparse.Namespace, stdout: TextIO) -> int:
+    run_root, temporary_root = _resolve_run_root(args.run_root)
+    spec = load_run_spec(args.path)
+    result = execute_run_spec(
+        spec,
+        run_root=run_root,
+        tick_limit=args.tick_limit,
+        run_id=args.run_id,
+        request_id=args.request_id,
+    )
+    payload = {
+        "ok": True,
+        "entry_point": "spec-run",
+        "temporary_run_root": temporary_root,
+        "spec_path": str(Path(args.path)),
+        "execution": result.to_dict(),
     }
     json.dump(payload, stdout, indent=2, sort_keys=True)
     stdout.write("\n")

@@ -18,9 +18,11 @@ Executable entry points:
 - `python -m metaflow_clockwork validate`
 - `python -m metaflow_clockwork bridge-envelope --profile-id <profile> --op <op>`
 - `python -m metaflow_clockwork spec-validate <path-to-spec.json>`
+- `python -m metaflow_clockwork spec-run <path-to-spec.json>`
 - `metaflow-clockwork validate`
 - `metaflow-clockwork bridge-envelope --profile-id <profile> --op <op>`
 - `metaflow-clockwork spec-validate <path-to-spec.json>`
+- `metaflow-clockwork spec-run <path-to-spec.json>`
 
 ## Install
 
@@ -85,6 +87,28 @@ The validator applies defaults for:
 - `tick_limit`
 - `max_recursive_depth`
 
+## Spec-Driven Local Execution
+
+Execute a validated run spec into a local ledger-backed run directory:
+
+```bash
+python -m metaflow_clockwork spec-run ./spec.json --run-root /tmp/metaflow-runs
+```
+
+Optional execution overrides:
+
+- `--tick-limit`
+- `--run-id`
+- `--request-id`
+
+The command writes:
+
+- `events.jsonl`
+- `events.sha256`
+- `emit_failures.jsonl`
+
+under `<run_root>/<run_id>/`.
+
 ## Test Commands
 
 ```bash
@@ -92,6 +116,7 @@ python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/
 python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6
 python3 -m metaflow_clockwork validate
 python3 -m metaflow_clockwork spec-validate ./spec.json
+python3 -m metaflow_clockwork spec-run ./spec.json --run-root /tmp/metaflow-runs
 ```
 
 ## Authority Boundaries

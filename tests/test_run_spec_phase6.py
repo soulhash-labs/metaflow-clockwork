@@ -8,7 +8,7 @@ from pathlib import Path
 
 from metaflow_clockwork import ClockworkEngine, MetaTagType
 from metaflow_clockwork.cli import main
-from metaflow_clockwork.run_spec import RunSpecError, instantiate_run_spec, load_run_spec
+from metaflow_clockwork.run_spec import RunSpecError, execute_run_spec, instantiate_run_spec, load_run_spec
 
 
 class RunSpecPhase6Tests(unittest.TestCase):
@@ -139,6 +139,80 @@ class RunSpecPhase6Tests(unittest.TestCase):
         self.assertEqual(payload["entry_point"], "spec-validate")
         self.assertEqual(payload["spec"]["tick_limit"], 3)
         self.assertIn("spawn_harmonics", payload["known_functions"])
+
+    def test_execute_run_spec_writes_ledger_backed_run(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "run_spec.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "run_id": "run-phase7",
+                        "request_id": "req-phase7",
+                        "tick_limit": 2,
+                        "root_tags": [
+                            {
+                                "tag_type": "gear",
+                                "functions": ["spawn_harmonics"],
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            spec = load_run_spec(path)
+            result = execute_run_spec(spec, run_root=tmpdir)
+
+            self.assertEqual(result.run_id, "run-phase7")
+            self.assertEqual(result.request_id, "req-phase7")
+            self.assertEqual(result.tick_limit, 2)
+            self.assertEqual(len(result.tick_summaries), 2)
+            self.assertTrue(Path(result.events_path).exists())
+            self.assertTrue(Path(result.chain_path).exists())
+
+    def test_spec_run_cli_honors_tick_limit_override(self) -> None:
+        output = io.StringIO()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "cli_run_spec.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "tick_limit": 1,
+                        "root_tags": [
+                            {
+                                "tag_type": "gear",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            rc = main(
+                [
+                    "spec-run",
+                    str(path),
+                    "--run-root",
+                    tmpdir,
+                    "--tick-limit",
+                    "3",
+                    "--run-id",
+                    "run-cli-phase7",
+                    "--request-id",
+                    "req-cli-phase7",
+                ],
+                stdout=output,
+            )
+
+        self.assertEqual(rc, 0)
+        payload = json.loads(output.getvalue())
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["entry_point"], "spec-run")
+        self.assertFalse(payload["temporary_run_root"])
+        self.assertEqual(payload["execution"]["run_id"], "run-cli-phase7")
+        self.assertEqual(payload["execution"]["request_id"], "req-cli-phase7")
+        self.assertEqual(payload["execution"]["tick_limit"], 3)
+        self.assertEqual(len(payload["execution"]["tick_summaries"]), 3)
 
 
 if __name__ == "__main__":

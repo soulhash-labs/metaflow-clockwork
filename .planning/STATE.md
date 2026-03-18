@@ -2,8 +2,8 @@
 
 **Date:** 2026-03-18
 **Project:** MetaFlow Clockwork
-**Current phase:** Phase 7 - Spec-Driven Local Execution
-**Overall status:** v1.0 foundation milestone is complete; v1.1 run-spec contract and validation are complete, and spec-driven local execution is next.
+**Current phase:** Phase 8 - Ledger Replay And Verification
+**Overall status:** v1.0 foundation milestone is complete; v1.1 run-spec validation and spec-driven local execution are complete, and replay/verification is next.
 
 ## Phase Status
 
@@ -15,7 +15,7 @@
 | 4 | QRBT Bridge Contract Hardening | Completed |
 | 5 | Packaging, Tests, And Release Readiness | Completed |
 | 6 | Run-Spec Contract And Validation | Completed |
-| 7 | Spec-Driven Local Execution | Planned |
+| 7 | Spec-Driven Local Execution | Completed |
 | 8 | Ledger Replay And Verification | Planned |
 | 9 | Operator Docs And Hardening | Planned |
 
@@ -26,10 +26,12 @@
 - Deterministic engine behavior, ledger compatibility, live QRBT bridge alignment, and package entry points are validated baseline capabilities from v1.0.
 - `.planning/RUN_SPEC_CONTRACT.md` now records the JSON run-spec schema, defaults, and function-binding rules for v1.1.
 - `spec-validate` now validates local run specs and instantiates them against the registered function catalog without contacting QRBT.
-- `tests/test_run_spec_phase6.py` now covers defaults, tag-type rejection, function-binding rejection, and CLI validation output.
-- The next execution gap is spec-driven local execution into ledger-backed run directories.
+- `spec-run` now executes validated run specs into local Aurora-style run directories without contacting QRBT.
+- CLI execution can override `tick_limit`, `run_id`, and `request_id` while still preserving deterministic defaults from the spec contract.
+- `tests/test_run_spec_phase6.py` now covers execution output, ledger artifact creation, and tick-limit override behavior in addition to Phase 6 validation cases.
+- The next execution gap is replay and chain verification over emitted run ledgers.
 - The repo still has untracked local noise and `.srclight` artifacts that were intentionally left untouched.
 
 ## Next Action
 
-- Start Phase 7 by executing validated run specs into local Aurora-style run directories with bounded tick counts.
+- Start Phase 8 by summarizing, replaying, and verifying emitted ledger chains from local runs.
