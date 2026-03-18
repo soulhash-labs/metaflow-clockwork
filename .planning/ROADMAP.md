@@ -1,51 +1,53 @@
 # Roadmap: MetaFlow Clockwork
 
 **Project:** MetaFlow Clockwork
-**Date:** 2026-03-17
-**Planning Basis:** `PROJECT.md`, visible package sources, Aurora control-boundary ADRs
-**Milestone Intent:** Make MetaFlow Clockwork a small, testable, ledger-compatible Aurora package that integrates with QRBT without bypassing existing authority.
+**Date:** 2026-03-18
+**Planning Basis:** `PROJECT.md`, `MILESTONES.md`, visible package sources, Aurora control-boundary ADRs
+**Current Milestone:** v1.1 Spec-Driven Execution And Replay
+**Milestone Intent:** Make MetaFlow Clockwork practical for operators by supporting declarative local run specs and first-class replay/verification of emitted ledgers without widening QRBT authority.
 
-## Phase 1: Repo Hygiene And Planning Baseline
+## Shipped Baseline
 
-**Goal:** Establish repo-local planning state, basic project intent, and explicit constraints before expanding runtime or bridge behavior.
+**v1.0 Foundation Package:** completed in Phases 1-5
 
-**Observable success criteria:**
-- Standard `.planning` files exist in the repo.
-- Current package seams are documented.
-- The next work items are phase-scoped instead of ad hoc.
+Delivered:
+- deterministic engine and event observation
+- Aurora-compatible ledger writing
+- live QRBT bridge alignment
+- package metadata and local validation entry points
 
-## Phase 2: Engine And Event Determinism
+## Phase 6: Run-Spec Contract And Validation
 
-**Goal:** Validate recursive engine behavior and event emission semantics so local runs are predictable and testable.
-
-**Observable success criteria:**
-- `MetaTag.tick()` behavior is covered by unit tests.
-- Recursive spawn depth and exhaustion behavior are deterministic under test.
-- Event emission paths are observable without relying on stdout inspection alone.
-
-## Phase 3: Ledger Compatibility And Auditability
-
-**Goal:** Ensure the ledger sink remains compatible with Aurora run-ledger expectations and produces durable event-chain artifacts.
+**Goal:** Define a stable local run-spec contract that binds only to known tag types and registered functions.
 
 **Observable success criteria:**
-- `events.jsonl` and `events.sha256` emission is covered by tests.
-- Event payload shape is documented and stable.
-- Failure paths preserve useful audit evidence.
+- A run-spec file format is documented.
+- Spec validation rejects unknown tag types and unknown function names.
+- Deterministic execution defaults are explicit and testable.
 
-## Phase 4: QRBT Bridge Contract Hardening
+## Phase 7: Spec-Driven Local Execution
 
-**Goal:** Align bridge payloads and target endpoints with current live QRBT authority instead of stale assumptions.
-
-**Observable success criteria:**
-- Bridge contract is mapped against live QRBT surfaces.
-- Any stale endpoint assumptions are corrected.
-- Bridge behavior preserves QRBT and gateway authority boundaries.
-
-## Phase 5: Packaging, Tests, And Release Readiness
-
-**Goal:** Make the package easy to validate, install, and reuse inside Aurora workflows.
+**Goal:** Execute MetaFlow runs directly from validated run-spec files into local Aurora-style run directories.
 
 **Observable success criteria:**
-- Package metadata and test entry points exist.
-- Local validation steps are documented.
-- Release/readiness notes exist for Aurora operators.
+- CLI can run a spec file with a bounded tick count.
+- Spec-driven runs write `events.jsonl` and `events.sha256`.
+- Execution stays local and does not contact QRBT by default.
+
+## Phase 8: Ledger Replay And Verification
+
+**Goal:** Add first-class replay and chain-verification tooling for emitted run ledgers.
+
+**Observable success criteria:**
+- CLI can summarize and replay ledger events in recorded order.
+- Chain verification can detect mismatches between `events.jsonl` and `events.sha256`.
+- Replay behavior is covered by local tests.
+
+## Phase 9: Operator Docs And Hardening
+
+**Goal:** Close the milestone with operator-facing docs, examples, and test coverage for the new runtime surface.
+
+**Observable success criteria:**
+- README examples match the shipped CLI behavior.
+- Tests cover run-spec validation, local execution, and replay/verification.
+- Release/readiness notes are updated for the new commands.

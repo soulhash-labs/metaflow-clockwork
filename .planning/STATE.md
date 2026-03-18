@@ -2,8 +2,8 @@
 
 **Date:** 2026-03-18
 **Project:** MetaFlow Clockwork
-**Current phase:** Completed
-**Overall status:** Planning baseline, engine determinism, ledger compatibility, QRBT bridge hardening, and packaging/release readiness are complete for the current MetaFlow Clockwork roadmap.
+**Current phase:** Phase 6 - Run-Spec Contract And Validation
+**Overall status:** v1.0 foundation milestone is complete; v1.1 spec-driven execution and replay milestone is defined and ready for execution.
 
 ## Phase Status
 
@@ -14,27 +14,19 @@
 | 3 | Ledger Compatibility And Auditability | Completed |
 | 4 | QRBT Bridge Contract Hardening | Completed |
 | 5 | Packaging, Tests, And Release Readiness | Completed |
+| 6 | Run-Spec Contract And Validation | Planned |
+| 7 | Spec-Driven Local Execution | Planned |
+| 8 | Ledger Replay And Verification | Planned |
+| 9 | Operator Docs And Hardening | Planned |
 
 ## Notes
 
-- Repo-local `.planning` is now the canonical planning baseline for the repo.
-- `tests/test_engine_phase2.py` now covers deterministic `MetaTag.tick()` behavior, recursive depth limits, exhaustion cleanup, and structured tick summaries.
-- `RecordingEventSink` provides an in-memory event observation path for tests without relying on stdout.
-- Tick execution now has a stable child boundary: children spawned during a tick execute on the next tick.
-- Spawned children now inherit `max_recursive_depth` unless explicitly overridden.
-- `LedgerEventSink` now writes Aurora-style `events.jsonl` and `events.sha256` files under `<run_root>/<run_id>/`.
-- `emit_failures.jsonl` now preserves best-effort audit evidence for serialization, write, and run-id mismatch failures.
-- `.planning/LEDGER_CONTRACT.md` records the stable Phase 3 event and chain contract.
-- `QRBTBridge` now targets QRBT's live OpenClaw bridge on `:7799` and emits `/qrbtrun <profile_id> <op>` command envelopes instead of the stale `POST /run` contract.
-- `.planning/BRIDGE_CONTRACT.md` records the stable Phase 4 authority seam and failure posture.
-- Bridge failures now raise `QRBTBridgeError` with status, command, and detail context instead of silent payload drift.
-- `tests/test_qrbt_bridge_phase4.py` now covers live bridge payload formation, unsupported args rejection, HTTP detail propagation, and result normalization.
-- `pyproject.toml` now defines the package metadata and `metaflow-clockwork` console script entry point.
-- `metaflow_clockwork/cli.py` and `metaflow_clockwork/__main__.py` now provide local `validate` and `bridge-envelope` commands.
-- `README.md` and `.planning/RELEASE_READINESS.md` document entry points, validation commands, and rollback posture.
-- `tests/test_cli_phase5.py` now covers the Phase 5 CLI and local validation surface.
-- The repo has untracked local noise and `.srclight` artifacts that were intentionally left untouched.
+- Repo-local `.planning` remains the canonical planning baseline for the repo.
+- `v1.0 Foundation Package` is recorded in `.planning/MILESTONES.md` as the closed baseline milestone.
+- Deterministic engine behavior, ledger compatibility, live QRBT bridge alignment, and package entry points are validated baseline capabilities from v1.0.
+- The next execution gap is operator usability: spec-defined local runs and replay/verification of emitted ledgers.
+- The repo still has untracked local noise and `.srclight` artifacts that were intentionally left untouched.
 
 ## Next Action
 
-- Treat the current roadmap as complete unless a new milestone is opened.
+- Start Phase 6 by defining the run-spec schema, allowed function-binding rules, and validation behavior.

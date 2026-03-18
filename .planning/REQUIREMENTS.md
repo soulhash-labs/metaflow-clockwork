@@ -1,55 +1,70 @@
 # Requirements: MetaFlow Clockwork
 
-**Defined:** 2026-03-17
+**Defined:** 2026-03-18
 **Core Value:** Provide a small Aurora-local execution package that emits deterministic events, writes ledger-compatible records, and integrates with QRBT through approved bridge semantics.
 
-## v1 Requirements
+## v1.1 Requirements
 
-### Engine Behavior
+### Run Specs
 
-- [x] **ENG-01**: `MetaTag` execution and child spawning behave deterministically under test.
-- [x] **ENG-02**: Recursive depth and exhaustion behavior are bounded and observable.
-- [x] **ENG-03**: Engine tick summaries include enough structured data for debugging and audit use.
+- [ ] **SPEC-01**: Operator can define root tags, static tag data, and registered function names in a local run-spec file.
+- [ ] **SPEC-02**: Package validates run-spec files and rejects unknown tag types or unknown function bindings before execution starts.
+- [ ] **SPEC-03**: Spec parsing preserves deterministic defaults for `run_id`, `request_id`, recursive depth, and tick limits.
 
-### Event And Ledger Compatibility
+### Local Execution
 
-- [x] **LED-01**: Event sink protocol supports no-op, stdout, and ledger-backed implementations without changing engine behavior.
-- [x] **LED-02**: Ledger sink writes `events.jsonl` and `events.sha256` in an Aurora-compatible run directory layout.
-- [x] **LED-03**: Event payloads preserve `run_id`, `request_id`, type, level, and payload data consistently.
+- [ ] **EXEC-01**: CLI can execute a validated run-spec into a named local run directory without contacting QRBT.
+- [ ] **EXEC-02**: Spec-driven execution writes Aurora-style ledger artifacts for the resulting run.
+- [ ] **EXEC-03**: Operator can bound execution by an explicit tick limit from the CLI or run spec.
 
-### QRBT Integration
+### Replay And Verification
 
-- [x] **BRG-01**: Bridge payloads align with current live QRBT authority surfaces.
-- [x] **BRG-02**: Bridge integration does not bypass QRBT or gateway control boundaries.
-- [x] **BRG-03**: Bridge failure paths return actionable errors instead of silent drift.
+- [ ] **REPL-01**: Operator can inspect a run ledger and get summary information including run id, event count, and event kinds.
+- [ ] **REPL-02**: Operator can replay ledger events in recorded order from the CLI.
+- [ ] **REPL-03**: Package can verify `events.sha256` against `events.jsonl` and report mismatches clearly.
 
-### Repo Readiness
+### Release Readiness
 
-- [x] **REP-01**: Repo-local `.planning` remains canonical for future work.
-- [x] **REP-02**: Basic unit tests cover engine, ledger sink, and bridge payload formation.
-- [x] **REP-03**: Package entry points and validation steps are documented.
+- [ ] **OPS-01**: Unit tests cover run-spec validation, spec-driven execution, and replay/verification behavior.
+- [ ] **OPS-02**: CLI help and README examples cover the new spec and replay commands accurately.
+
+## v1.2 Requirements
+
+### Snapshot And Resume
+
+- **SNAP-01**: Operator can persist engine state snapshots and resume execution from them.
+- **SNAP-02**: Snapshot contents preserve enough state to reproduce subsequent ticks deterministically.
+
+### QRBT Runtime Integration
+
+- **QINT-01**: MetaFlow can submit validated local run artifacts into QRBT review or run workflows without bypassing authority boundaries.
+- **QINT-02**: Host-level integration tests cover the MetaFlow-to-QRBT handoff against a live Aurora host.
 
 ## Out Of Scope
 
 | Feature | Reason |
 |---------|--------|
-| New operator shell | Violates Aurora control-boundary posture. |
-| Direct gateway/daemon bypass | Must remain under QRBT and gateway authority. |
-| Federation or remote orchestration | Deferred until local package behavior is stable. |
+| Arbitrary Python code embedded in run-spec files | Would weaken deterministic execution and auditability. |
+| Direct QRBT or gateway execution during spec runs | This milestone stays local-first and does not widen authority boundaries. |
+| Federation or remote orchestration | Deferred until spec execution and replay are stable locally. |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ENG-01 | Phase 2: Engine And Event Determinism | Completed |
-| ENG-02 | Phase 2: Engine And Event Determinism | Completed |
-| ENG-03 | Phase 2: Engine And Event Determinism | Completed |
-| LED-01 | Phase 3: Ledger Compatibility And Auditability | Completed |
-| LED-02 | Phase 3: Ledger Compatibility And Auditability | Completed |
-| LED-03 | Phase 3: Ledger Compatibility And Auditability | Completed |
-| BRG-01 | Phase 4: QRBT Bridge Contract Hardening | Completed |
-| BRG-02 | Phase 4: QRBT Bridge Contract Hardening | Completed |
-| BRG-03 | Phase 4: QRBT Bridge Contract Hardening | Completed |
-| REP-01 | Phase 1: Repo Hygiene And Planning Baseline | Completed |
-| REP-02 | Phase 4: QRBT Bridge Contract Hardening | Completed |
-| REP-03 | Phase 5: Packaging, Tests, And Release Readiness | Completed |
+| SPEC-01 | Phase 6: Run-Spec Contract And Validation | Pending |
+| SPEC-02 | Phase 6: Run-Spec Contract And Validation | Pending |
+| SPEC-03 | Phase 6: Run-Spec Contract And Validation | Pending |
+| EXEC-01 | Phase 7: Spec-Driven Local Execution | Pending |
+| EXEC-02 | Phase 7: Spec-Driven Local Execution | Pending |
+| EXEC-03 | Phase 7: Spec-Driven Local Execution | Pending |
+| REPL-01 | Phase 8: Ledger Replay And Verification | Pending |
+| REPL-02 | Phase 8: Ledger Replay And Verification | Pending |
+| REPL-03 | Phase 8: Ledger Replay And Verification | Pending |
+| OPS-01 | Phase 9: Operator Docs And Hardening | Pending |
+| OPS-02 | Phase 9: Operator Docs And Hardening | Pending |
+
+**Coverage:**
+- v1.1 requirements: 11 total
+- Mapped to phases: 11
+- Unmapped: 0
