@@ -20,12 +20,13 @@
 
 ## v1.1 Spec-Driven Execution And Replay
 
-**Status:** Planned on 2026-03-18
+**Status:** Completed on 2026-03-18
 
 **Goal:** Add declarative local run specs, deterministic spec execution, and first-class replay/verification tooling without widening QRBT authority.
 
-**Planned scope:**
+**Shipped scope:**
 - run-spec schema and validation
 - CLI execution from run-spec files
 - ledger replay and chain verification
 - tests and docs for the new operator-facing runtime surface
+- checked-in example spec and operator guide

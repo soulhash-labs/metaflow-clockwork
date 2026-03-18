@@ -35,11 +35,12 @@ Aurora gets a lightweight programmable execution engine that can emit determinis
 - ✓ QRBT bridge aligns to the live `/api/openclaw/command` seam without bypassing QRBT or gateway authority — v1.0
 - ✓ Package metadata, CLI entry points, and local release-readiness validation are documented and tested — v1.0
 
-### Active
+### Completed
 
 - Add declarative run-spec loading for root tags, tag data, and registered function names.
 - Add CLI execution from run-spec files into deterministic local ledger directories.
 - Add ledger replay and chain-verification tooling for local debugging and audit.
+- Add checked-in operator examples and help/test coverage for the shipped CLI surface.
 
 ### Out Of Scope
 
@@ -52,7 +53,7 @@ Aurora gets a lightweight programmable execution engine that can emit determinis
 
 - v1.0 shipped as a bounded package milestone on 2026-03-18 with phases 1-5 complete.
 - The runtime can now execute deterministic tags, write Aurora-style ledgers, and form live QRBT bridge envelopes, but it still requires handwritten Python construction for most runs.
-- The next practical gap is operator usability: local declarative run setup and first-class replay/inspection of emitted ledgers.
+- The v1.1 practical operator gap is now closed: local declarative run setup, replay/inspection, and checked-in example guidance are all in place.
 
 ## Constraints
 
@@ -67,8 +68,8 @@ Aurora gets a lightweight programmable execution engine that can emit determinis
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | v1.0 remains the validated baseline | Prevents new runtime scope from rewriting the closed foundation milestone | ✓ Good |
-| v1.1 focuses on local spec execution and replay, not new authority surfaces | Highest operator payoff without widening QRBT control boundaries | — Pending |
-| Run specs will bind only to registered functions | Keeps local execution deterministic and auditable | — Pending |
+| v1.1 focuses on local spec execution and replay, not new authority surfaces | Highest operator payoff without widening QRBT control boundaries | ✓ Good |
+| Run specs will bind only to registered functions | Keeps local execution deterministic and auditable | ✓ Good |
 
 ---
-*Last updated: 2026-03-18 after milestone v1.1 start*
+*Last updated: 2026-03-18 after Phase 9 completion*

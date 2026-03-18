@@ -25,8 +25,8 @@
 
 ### Release Readiness
 
-- [ ] **OPS-01**: Unit tests cover run-spec validation, spec-driven execution, and replay/verification behavior.
-- [ ] **OPS-02**: CLI help and README examples cover the new spec and replay commands accurately.
+- [x] **OPS-01**: Unit tests cover run-spec validation, spec-driven execution, and replay/verification behavior.
+- [x] **OPS-02**: CLI help and README examples cover the new spec and replay commands accurately.
 
 ## v1.2 Requirements
 
@@ -61,11 +61,11 @@
 | REPL-01 | Phase 8: Ledger Replay And Verification | Completed |
 | REPL-02 | Phase 8: Ledger Replay And Verification | Completed |
 | REPL-03 | Phase 8: Ledger Replay And Verification | Completed |
-| OPS-01 | Phase 9: Operator Docs And Hardening | Pending |
-| OPS-02 | Phase 9: Operator Docs And Hardening | Pending |
+| OPS-01 | Phase 9: Operator Docs And Hardening | Completed |
+| OPS-02 | Phase 9: Operator Docs And Hardening | Completed |
 
 **Coverage:**
 - v1.1 requirements: 11 total
-- Completed: 9
-- Pending: 2
+- Completed: 11
+- Pending: 0
 - Unmapped: 0

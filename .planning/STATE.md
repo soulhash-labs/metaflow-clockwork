@@ -2,8 +2,8 @@
 
 **Date:** 2026-03-18
 **Project:** MetaFlow Clockwork
-**Current phase:** Phase 9 - Operator Docs And Hardening
-**Overall status:** v1.0 foundation milestone is complete; v1.1 run-spec validation, spec-driven local execution, and replay/verification are complete, and final operator hardening is next.
+**Current phase:** Milestone complete
+**Overall status:** v1.0 foundation milestone is complete and v1.1 spec-driven execution/replay milestone is complete; the next step is to open a new milestone when a new bounded slice is approved.
 
 ## Phase Status
 
@@ -17,7 +17,7 @@
 | 6 | Run-Spec Contract And Validation | Completed |
 | 7 | Spec-Driven Local Execution | Completed |
 | 8 | Ledger Replay And Verification | Completed |
-| 9 | Operator Docs And Hardening | Planned |
+| 9 | Operator Docs And Hardening | Completed |
 
 ## Notes
 
@@ -34,8 +34,11 @@
 - `ledger-summary` reports run shape without mutating any files.
 - `ledger-replay` returns recorded events in ledger order with optional event-type and limit filters.
 - `ledger-verify` now recomputes event hashes and checks chain drift against `events.sha256`.
+- `examples/basic_harmonics.json` is now a checked-in operator fixture for validation and execution smoke tests.
+- `.planning/OPERATOR_GUIDE.md` now records the recommended local-first operator workflow.
+- CLI help/test coverage now explicitly covers the shipped operator command surface.
 - The repo still has untracked local noise and `.srclight` artifacts that were intentionally left untouched.
 
 ## Next Action
 
-- Start Phase 9 by tightening operator docs, examples, and final hardening around the v1.1 runtime surface.
+- Open a new milestone only after a new bounded post-v1.1 slice is chosen.

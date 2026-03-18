@@ -65,7 +65,7 @@ python -m metaflow_clockwork bridge-envelope --profile-id default --op audit
 Validate a local JSON run spec:
 
 ```bash
-python -m metaflow_clockwork spec-validate ./spec.json
+python -m metaflow_clockwork spec-validate ./examples/basic_harmonics.json
 ```
 
 Example spec:
@@ -98,7 +98,7 @@ The validator applies defaults for:
 Execute a validated run spec into a local ledger-backed run directory:
 
 ```bash
-python -m metaflow_clockwork spec-run ./spec.json --run-root /tmp/metaflow-runs
+python -m metaflow_clockwork spec-run ./examples/basic_harmonics.json --run-root /tmp/metaflow-runs
 ```
 
 Optional execution overrides:
@@ -145,15 +145,21 @@ These commands accept either:
 ## Test Commands
 
 ```bash
-python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py tests/test_ledger_replay_phase8.py
-python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6 tests.test_ledger_replay_phase8
+python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py tests/test_ledger_replay_phase8.py tests/test_operator_phase9.py
+python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6 tests.test_ledger_replay_phase8 tests.test_operator_phase9
 python3 -m metaflow_clockwork validate
-python3 -m metaflow_clockwork spec-validate ./spec.json
-python3 -m metaflow_clockwork spec-run ./spec.json --run-root /tmp/metaflow-runs
+python3 -m metaflow_clockwork spec-validate ./examples/basic_harmonics.json
+python3 -m metaflow_clockwork spec-run ./examples/basic_harmonics.json --run-root /tmp/metaflow-runs
 python3 -m metaflow_clockwork ledger-summary /tmp/metaflow-runs/<run_id>
 python3 -m metaflow_clockwork ledger-replay /tmp/metaflow-runs/<run_id> --kind metaflow.tick.summary
 python3 -m metaflow_clockwork ledger-verify /tmp/metaflow-runs/<run_id>
 ```
+
+## Operator Reference
+
+Operator walkthrough and expected outcomes:
+
+- [.planning/OPERATOR_GUIDE.md](/opt/aurora/repos/metaflow/.planning/OPERATOR_GUIDE.md)
 
 ## Authority Boundaries
 

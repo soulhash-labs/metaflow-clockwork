@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "run_id": "example_harmonics",
+  "request_id": "example_harmonics-request",
+  "tick_limit": 2,
+  "max_recursive_depth": 4,
+  "root_tags": [
+    {
+      "tag_type": "gear",
+      "functions": ["spawn_harmonics"],
+      "data": {
+        "frequency": 528,
+        "label": "example-basic-harmonics"
+      }
+    }
+  ]
+}

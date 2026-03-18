@@ -53,3 +53,5 @@ Delivered:
 - README examples match the shipped CLI behavior.
 - Tests cover run-spec validation, local execution, and replay/verification.
 - Release/readiness notes are updated for the new commands.
+
+**Status:** Completed

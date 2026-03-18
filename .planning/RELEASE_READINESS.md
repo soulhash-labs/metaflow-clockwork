@@ -2,7 +2,7 @@
 
 ## Scope
 
-Phase 5 closes the current MetaFlow Clockwork roadmap by documenting package entry points and the local validation path.
+Phase 9 closes the current MetaFlow Clockwork v1.1 milestone by documenting the operator workflow, checked-in examples, and help/test coverage for the local runtime surface.
 
 ## Package Entry Points
 
@@ -49,14 +49,24 @@ Replays ledger events in recorded order with optional event-type filtering and o
 
 Recomputes the Aurora-style event chain and reports any drift between `events.jsonl` and `events.sha256`.
 
+## Checked-In Example
+
+The checked-in example spec is:
+
+- `./examples/basic_harmonics.json`
+
+Operator walkthrough:
+
+- `./.planning/OPERATOR_GUIDE.md`
+
 ## Validation Commands
 
 ```bash
-python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py tests/test_ledger_replay_phase8.py
-python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6 tests.test_ledger_replay_phase8
+python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py tests/test_ledger_replay_phase8.py tests/test_operator_phase9.py
+python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6 tests.test_ledger_replay_phase8 tests.test_operator_phase9
 python3 -m metaflow_clockwork validate
-python3 -m metaflow_clockwork spec-validate ./spec.json
-python3 -m metaflow_clockwork spec-run ./spec.json --run-root /tmp/metaflow-runs
+python3 -m metaflow_clockwork spec-validate ./examples/basic_harmonics.json
+python3 -m metaflow_clockwork spec-run ./examples/basic_harmonics.json --run-root /tmp/metaflow-runs
 python3 -m metaflow_clockwork bridge-envelope --profile-id default --op audit
 python3 -m metaflow_clockwork ledger-summary /tmp/metaflow-runs/<run_id>
 python3 -m metaflow_clockwork ledger-replay /tmp/metaflow-runs/<run_id> --kind metaflow.tick.summary
@@ -65,12 +75,13 @@ python3 -m metaflow_clockwork ledger-verify /tmp/metaflow-runs/<run_id>
 
 ## Rollback Posture
 
-This phase changes only local package metadata, entry points, and documentation.
+This phase changes only local package code, tests, examples, and documentation.
 
 Rollback is straightforward:
 
 - revert `pyproject.toml`
 - revert `README.md`
+- revert `examples/basic_harmonics.json`
 - revert `metaflow_clockwork/cli.py`
 - revert `metaflow_clockwork/__main__.py`
 - revert the related docs and tests
