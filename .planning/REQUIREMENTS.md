@@ -13,9 +13,9 @@
 
 ### Event And Ledger Compatibility
 
-- [ ] **LED-01**: Event sink protocol supports no-op, stdout, and ledger-backed implementations without changing engine behavior.
-- [ ] **LED-02**: Ledger sink writes `events.jsonl` and `events.sha256` in an Aurora-compatible run directory layout.
-- [ ] **LED-03**: Event payloads preserve `run_id`, `request_id`, type, level, and payload data consistently.
+- [x] **LED-01**: Event sink protocol supports no-op, stdout, and ledger-backed implementations without changing engine behavior.
+- [x] **LED-02**: Ledger sink writes `events.jsonl` and `events.sha256` in an Aurora-compatible run directory layout.
+- [x] **LED-03**: Event payloads preserve `run_id`, `request_id`, type, level, and payload data consistently.
 
 ### QRBT Integration
 
@@ -44,9 +44,9 @@
 | ENG-01 | Phase 2: Engine And Event Determinism | Completed |
 | ENG-02 | Phase 2: Engine And Event Determinism | Completed |
 | ENG-03 | Phase 2: Engine And Event Determinism | Completed |
-| LED-01 | Phase 3: Ledger Compatibility And Auditability | Planned |
-| LED-02 | Phase 3: Ledger Compatibility And Auditability | Planned |
-| LED-03 | Phase 3: Ledger Compatibility And Auditability | Planned |
+| LED-01 | Phase 3: Ledger Compatibility And Auditability | Completed |
+| LED-02 | Phase 3: Ledger Compatibility And Auditability | Completed |
+| LED-03 | Phase 3: Ledger Compatibility And Auditability | Completed |
 | BRG-01 | Phase 4: QRBT Bridge Contract Hardening | Planned |
 | BRG-02 | Phase 4: QRBT Bridge Contract Hardening | Planned |
 | BRG-03 | Phase 4: QRBT Bridge Contract Hardening | Planned |
