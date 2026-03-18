@@ -29,12 +29,18 @@ Outputs the exact QRBT/OpenClaw command envelope MetaFlow would form for:
 
 - `/qrbtrun <profile_id> <op>`
 
+### `spec-validate`
+
+Validates a local JSON run spec, applies deterministic defaults, and confirms the spec can be instantiated against the current registered function catalog.
+
 ## Validation Commands
 
 ```bash
 python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py
-python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5
+python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py
+python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6
 python3 -m metaflow_clockwork validate
+python3 -m metaflow_clockwork spec-validate ./spec.json
 python3 -m metaflow_clockwork bridge-envelope --profile-id default --op audit
 ```
 

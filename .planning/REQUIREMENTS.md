@@ -7,9 +7,9 @@
 
 ### Run Specs
 
-- [ ] **SPEC-01**: Operator can define root tags, static tag data, and registered function names in a local run-spec file.
-- [ ] **SPEC-02**: Package validates run-spec files and rejects unknown tag types or unknown function bindings before execution starts.
-- [ ] **SPEC-03**: Spec parsing preserves deterministic defaults for `run_id`, `request_id`, recursive depth, and tick limits.
+- [x] **SPEC-01**: Operator can define root tags, static tag data, and registered function names in a local run-spec file.
+- [x] **SPEC-02**: Package validates run-spec files and rejects unknown tag types or unknown function bindings before execution starts.
+- [x] **SPEC-03**: Spec parsing preserves deterministic defaults for `run_id`, `request_id`, recursive depth, and tick limits.
 
 ### Local Execution
 
@@ -52,9 +52,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SPEC-01 | Phase 6: Run-Spec Contract And Validation | Pending |
-| SPEC-02 | Phase 6: Run-Spec Contract And Validation | Pending |
-| SPEC-03 | Phase 6: Run-Spec Contract And Validation | Pending |
+| SPEC-01 | Phase 6: Run-Spec Contract And Validation | Completed |
+| SPEC-02 | Phase 6: Run-Spec Contract And Validation | Completed |
+| SPEC-03 | Phase 6: Run-Spec Contract And Validation | Completed |
 | EXEC-01 | Phase 7: Spec-Driven Local Execution | Pending |
 | EXEC-02 | Phase 7: Spec-Driven Local Execution | Pending |
 | EXEC-03 | Phase 7: Spec-Driven Local Execution | Pending |
@@ -66,5 +66,6 @@
 
 **Coverage:**
 - v1.1 requirements: 11 total
-- Mapped to phases: 11
+- Completed: 3
+- Pending: 8
 - Unmapped: 0

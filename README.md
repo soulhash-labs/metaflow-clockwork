@@ -17,8 +17,10 @@ Executable entry points:
 
 - `python -m metaflow_clockwork validate`
 - `python -m metaflow_clockwork bridge-envelope --profile-id <profile> --op <op>`
+- `python -m metaflow_clockwork spec-validate <path-to-spec.json>`
 - `metaflow-clockwork validate`
 - `metaflow-clockwork bridge-envelope --profile-id <profile> --op <op>`
+- `metaflow-clockwork spec-validate <path-to-spec.json>`
 
 ## Install
 
@@ -50,12 +52,46 @@ To inspect the QRBT bridge envelope directly:
 python -m metaflow_clockwork bridge-envelope --profile-id default --op audit
 ```
 
+## Run-Spec Validation
+
+Validate a local JSON run spec:
+
+```bash
+python -m metaflow_clockwork spec-validate ./spec.json
+```
+
+Example spec:
+
+```json
+{
+  "version": 1,
+  "tick_limit": 3,
+  "root_tags": [
+    {
+      "tag_type": "gear",
+      "functions": ["spawn_harmonics"],
+      "data": {
+        "frequency": 528
+      }
+    }
+  ]
+}
+```
+
+The validator applies defaults for:
+
+- `run_id`
+- `request_id`
+- `tick_limit`
+- `max_recursive_depth`
+
 ## Test Commands
 
 ```bash
-python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py
-python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5
+python3 -m py_compile metaflow_clockwork/*.py tests/test_engine_phase2.py tests/test_ledger_sink_phase3.py tests/test_qrbt_bridge_phase4.py tests/test_cli_phase5.py tests/test_run_spec_phase6.py
+python3 -m unittest -v tests.test_engine_phase2 tests.test_ledger_sink_phase3 tests.test_qrbt_bridge_phase4 tests.test_cli_phase5 tests.test_run_spec_phase6
 python3 -m metaflow_clockwork validate
+python3 -m metaflow_clockwork spec-validate ./spec.json
 ```
 
 ## Authority Boundaries

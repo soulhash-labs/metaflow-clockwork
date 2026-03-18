@@ -12,6 +12,7 @@ from .engine import ClockworkEngine, MetaTag, MetaTagType
 from .events import RecordingEventSink
 from .ledger_sink import LedgerEventSink
 from .qrbt_bridge import QRBTBridge
+from .run_spec import instantiate_run_spec, load_run_spec
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -39,6 +40,13 @@ def build_parser() -> argparse.ArgumentParser:
     bridge.add_argument("--actor", default="metaflow")
     bridge.add_argument("--tag-id", default="tag-validation")
     bridge.set_defaults(handler=_handle_bridge_envelope)
+
+    spec_validate = subparsers.add_parser(
+        "spec-validate",
+        help="Validate a local JSON run-spec and print the normalized contract",
+    )
+    spec_validate.add_argument("path", help="Path to the JSON run-spec file")
+    spec_validate.set_defaults(handler=_handle_spec_validate)
 
     return parser
 
@@ -128,9 +136,24 @@ def _handle_bridge_envelope(args: argparse.Namespace, stdout: TextIO) -> int:
     return 0
 
 
+def _handle_spec_validate(args: argparse.Namespace, stdout: TextIO) -> int:
+    engine = ClockworkEngine()
+    spec = load_run_spec(args.path, engine=engine)
+    root_tags = instantiate_run_spec(spec, engine=engine)
+    payload = {
+        "ok": True,
+        "entry_point": "spec-validate",
+        "spec": spec.to_dict(),
+        "instantiated_root_tags": [tag.tag_id for tag in root_tags],
+        "known_functions": sorted(engine.function_registry.keys()),
+    }
+    json.dump(payload, stdout, indent=2, sort_keys=True)
+    stdout.write("\n")
+    return 0
+
+
 def main(argv: list[str] | None = None, stdout: TextIO | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     out = stdout or sys.stdout
     return args.handler(args, out)
-
