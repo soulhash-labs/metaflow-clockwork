@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Aurora-compatible ledger sink for MetaFlow Clockwork."""
+"""Append-only ledger sink for MetaFlow Clockwork."""
 from __future__ import annotations
 
 import hashlib
 import json
+import os
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -19,6 +20,16 @@ def _utc_iso(ts: float | None = None) -> str:
     return datetime.fromtimestamp(ts or time.time(), tz=timezone.utc).isoformat().replace("+00:00", "Z")
 
 
+def _default_run_root() -> Path:
+    explicit = os.environ.get("METAFLOW_CLOCKWORK_RUN_ROOT")
+    if explicit and explicit.strip():
+        return Path(explicit).expanduser()
+    xdg_state_home = os.environ.get("XDG_STATE_HOME")
+    if xdg_state_home and xdg_state_home.strip():
+        return Path(xdg_state_home).expanduser() / "metaflow_clockwork" / "runs"
+    return Path.home() / ".local" / "state" / "metaflow_clockwork" / "runs"
+
+
 @dataclass
 class LedgerEmitError(RuntimeError):
     message: str
@@ -29,10 +40,10 @@ class LedgerEmitError(RuntimeError):
 
 
 class LedgerEventSink:
-    """Write MetaFlow events to Aurora-style run ledgers."""
+    """Write MetaFlow events to local run ledgers."""
 
-    def __init__(self, run_root: str = "/opt/aurora/var/ledger/runs", run_id: str = "metaflow"):
-        self.run_root = Path(run_root)
+    def __init__(self, run_root: str | None = None, run_id: str = "metaflow"):
+        self.run_root = Path(run_root).expanduser() if run_root else _default_run_root()
         self.run_id = str(run_id).strip() or "metaflow"
         self._last_hash = "0" * 64
         self._run_dir: Path | None = None

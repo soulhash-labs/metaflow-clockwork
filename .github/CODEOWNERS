@@ -1,0 +1,9 @@
+# Default ownership
+* @soulhash-ai/metaflow-maintainers
+
+# High-value project files
+/README.md @soulhash-ai/metaflow-maintainers
+/pyproject.toml @soulhash-ai/metaflow-maintainers
+/SECURITY.md @soulhash-ai/metaflow-maintainers
+/.github/ @soulhash-ai/metaflow-maintainers
+/.github/workflows/ @soulhash-ai/metaflow-maintainers

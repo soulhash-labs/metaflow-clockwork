@@ -1,0 +1,77 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build twine
+          python -m pip install -e .
+
+      - name: Compile Python sources
+        run: |
+          python -m py_compile metaflow_clockwork/*.py tests/test_*.py examples/basic_clockwork.py
+
+      - name: Run unit tests
+        run: |
+          python -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Run CLI smoke checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          RUN_ROOT="${RUNNER_TEMP}/metaflow-runs"
+          mkdir -p "$RUN_ROOT"
+          python -m metaflow_clockwork validate --run-root "$RUN_ROOT" --run-id ci-validate --request-id ci-request
+          python -m metaflow_clockwork spec-validate ./examples/basic_harmonics.json
+          python -m metaflow_clockwork spec-run ./examples/basic_harmonics.json --run-root "$RUN_ROOT"
+          python -m metaflow_clockwork ledger-verify "$RUN_ROOT/example_harmonics"
+
+      - name: Build distributions
+        run: |
+          rm -rf build dist metaflow_clockwork.egg-info
+          python -m build
+          python -m twine check dist/*
+
+      - name: Install wheel and rerun smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          WHEEL_VENV="${RUNNER_TEMP}/wheel-venv"
+          RUN_ROOT="${RUNNER_TEMP}/metaflow-wheel-runs"
+          SPEC_PATH="${GITHUB_WORKSPACE}/examples/basic_harmonics.json"
+          python -m venv "$WHEEL_VENV"
+          source "$WHEEL_VENV/bin/activate"
+          python -m pip install --upgrade pip
+          python -m pip install dist/*.whl
+          mkdir -p "$RUN_ROOT"
+          cd "$RUNNER_TEMP"
+          python -m metaflow_clockwork spec-validate "$SPEC_PATH"
+          python -m metaflow_clockwork spec-run "$SPEC_PATH" --run-root "$RUN_ROOT"
+          python -m metaflow_clockwork ledger-verify "$RUN_ROOT/example_harmonics"

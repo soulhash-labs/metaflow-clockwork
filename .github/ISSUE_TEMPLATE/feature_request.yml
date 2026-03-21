@@ -1,0 +1,26 @@
+name: Feature request
+description: Propose a bounded improvement to MetaFlow Clockwork
+title: "[feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What gap are you trying to close?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Boundary considerations
+      description: Call out any packaging, CLI, determinism, or public-scope constraints.
+      validations:
+        required: false

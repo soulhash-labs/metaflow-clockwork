@@ -1,0 +1,10 @@
+include ARCHITECTURE.md
+include CHANGELOG.md
+include CONTRIBUTING.md
+include ROADMAP.md
+include SECURITY.md
+include SUPPORT.md
+include TRADEMARKS.md
+recursive-include docs *.md
+recursive-include examples *.json *.py
+recursive-include prompts *.md *.json

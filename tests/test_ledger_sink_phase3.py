@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from metaflow_clockwork import LedgerEmitError, LedgerEventSink
 
@@ -17,7 +19,7 @@ class LedgerSinkPhase3Tests(unittest.TestCase):
     def tearDown(self) -> None:
         self._tmpdir.cleanup()
 
-    def test_emit_writes_qrbt_style_ledger_and_chain(self) -> None:
+    def test_emit_writes_ledger_and_chain(self) -> None:
         sink = LedgerEventSink(run_root=str(self.run_root), run_id="run_meta_1")
 
         sink.emit(
@@ -104,6 +106,13 @@ class LedgerSinkPhase3Tests(unittest.TestCase):
         self.assertEqual(failure["stage"], "serialize")
         self.assertEqual(failure["request_id"], "req-1")
         self.assertIn("{1, 2, 3}", failure["data_preview"])
+
+    def test_default_run_root_honors_environment_override(self) -> None:
+        with tempfile.TemporaryDirectory() as env_root:
+            with mock.patch.dict(os.environ, {"METAFLOW_CLOCKWORK_RUN_ROOT": env_root}, clear=False):
+                sink = LedgerEventSink(run_id="run_meta_5")
+
+        self.assertEqual(sink.run_root, Path(env_root))
 
 
 if __name__ == "__main__":

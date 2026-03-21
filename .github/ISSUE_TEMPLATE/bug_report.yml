@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible problem in MetaFlow Clockwork
+title: "[bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Provide a minimal, reproducible report. Do not include security-sensitive details here.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Package version, commit, or branch
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+    validations:
+      required: true
+  - type: textarea
+    id: install
+    attributes:
+      label: Install method
+      description: Editable install, source install, wheel install, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true

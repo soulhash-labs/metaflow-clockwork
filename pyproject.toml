@@ -1,16 +1,40 @@
 [build-system]
-requires = ["setuptools>=69"]
+requires = ["setuptools>=77.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "metaflow-clockwork"
 version = "0.1.0"
-description = "Aurora-local deterministic execution package for MetaFlow Clockwork"
+description = "Deterministic tag execution, append-only ledgers, and spec-driven local runs for MetaFlow Clockwork"
 readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
-dependencies = [
-  "httpx>=0.27,<1",
+dependencies = []
+keywords = [
+  "deterministic-execution",
+  "event-ledger",
+  "python-cli",
+  "workflow-runtime",
 ]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/soulhash-ai/metaflow-clockwork"
+Source = "https://github.com/soulhash-ai/metaflow-clockwork"
+Issues = "https://github.com/soulhash-ai/metaflow-clockwork/issues"
+Documentation = "https://github.com/soulhash-ai/metaflow-clockwork/tree/main/docs"
+Changelog = "https://github.com/soulhash-ai/metaflow-clockwork/blob/main/CHANGELOG.md"
 
 [project.scripts]
 metaflow-clockwork = "metaflow_clockwork.cli:main"

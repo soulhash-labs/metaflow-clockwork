@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
 import tempfile
 from pathlib import Path
@@ -33,7 +32,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     bridge = subparsers.add_parser(
         "bridge-envelope",
-        help="Emit the live QRBT bridge envelope without making a network call",
+        help="Emit a compatibility notice for the removed legacy QRBT bridge surface",
     )
     bridge.add_argument("--profile-id", required=True)
     bridge.add_argument("--op", required=True)
@@ -62,7 +61,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     ledger_summary = subparsers.add_parser(
         "ledger-summary",
-        help="Summarize an emitted Aurora-style ledger run",
+        help="Summarize an emitted local ledger run",
     )
     ledger_summary.add_argument("path", help="Run directory or ledger file path")
     ledger_summary.set_defaults(handler=_handle_ledger_summary)
@@ -92,6 +91,21 @@ def _resolve_run_root(value: str | None) -> tuple[str, bool]:
     return tempfile.mkdtemp(prefix="metaflow_clockwork_"), True
 
 
+def _legacy_qrbt_notice(*, profile_id: str, op: str, request_id: str, actor: str, tag_id: str) -> dict[str, object]:
+    bridge = QRBTBridge()
+    return bridge.emit_pending_confirm(
+        {
+            "tag_id": tag_id,
+            "request_id": request_id,
+            "actor": actor,
+            "qrbt": {
+                "profile_id": profile_id,
+                "op": op,
+            },
+        }
+    )
+
+
 def _handle_validate(args: argparse.Namespace, stdout: TextIO) -> int:
     run_root, temporary_root = _resolve_run_root(args.run_root)
     run_id = str(args.run_id).strip() or "metaflow_validation"
@@ -116,19 +130,6 @@ def _handle_validate(args: argparse.Namespace, stdout: TextIO) -> int:
         data={"summary": summary},
     )
 
-    bridge = QRBTBridge(qrbt_url=os.environ.get("METAFLOW_QRBT_URL"))
-    envelope = bridge.emit_pending_confirm(
-        {
-            "tag_id": "validation-tag",
-            "request_id": request_id,
-            "actor": "metaflow",
-            "qrbt": {
-                "profile_id": args.profile_id,
-                "op": args.op,
-            },
-        }
-    )
-
     result = {
         "ok": True,
         "entry_point": "validate",
@@ -146,7 +147,13 @@ def _handle_validate(args: argparse.Namespace, stdout: TextIO) -> int:
             "chain_path": str(ledger_sink.chain_path),
             "failures_path": str(ledger_sink.failures_path),
         },
-        "bridge": envelope,
+        "bridge": _legacy_qrbt_notice(
+            profile_id=args.profile_id,
+            op=args.op,
+            request_id=request_id,
+            actor="metaflow",
+            tag_id="validation-tag",
+        ),
     }
     json.dump(result, stdout, indent=2, sort_keys=True)
     stdout.write("\n")
@@ -154,19 +161,15 @@ def _handle_validate(args: argparse.Namespace, stdout: TextIO) -> int:
 
 
 def _handle_bridge_envelope(args: argparse.Namespace, stdout: TextIO) -> int:
-    bridge = QRBTBridge(qrbt_url=os.environ.get("METAFLOW_QRBT_URL"))
-    envelope = bridge.emit_pending_confirm(
-        {
-            "tag_id": args.tag_id,
-            "request_id": args.request_id,
-            "actor": args.actor,
-            "qrbt": {
-                "profile_id": args.profile_id,
-                "op": args.op,
-            },
-        }
+    payload = _legacy_qrbt_notice(
+        profile_id=args.profile_id,
+        op=args.op,
+        request_id=args.request_id,
+        actor=args.actor,
+        tag_id=args.tag_id,
     )
-    json.dump(envelope, stdout, indent=2, sort_keys=True)
+    payload["entry_point"] = "bridge-envelope"
+    json.dump(payload, stdout, indent=2, sort_keys=True)
     stdout.write("\n")
     return 0
 
@@ -250,3 +253,7 @@ def main(argv: list[str] | None = None, stdout: TextIO | None = None) -> int:
     args = parser.parse_args(argv)
     out = stdout or sys.stdout
     return args.handler(args, out)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "id": "local_runtime_agent",
+  "name": "Local Runtime Agent",
+  "purpose": "Validate and execute a bounded local MetaFlow Clockwork run without hidden orchestration.",
+  "lane_type": "local runtime behavior",
+  "inputs": {
+    "required": [
+      "run_spec_path"
+    ],
+    "optional": [
+      "run_root",
+      "tick_limit_override",
+      "request_id",
+      "run_id"
+    ],
+    "accepted_formats": {
+      "run_spec_path": "checked-in .json file path",
+      "run_root": "local directory path",
+      "tick_limit_override": "positive integer",
+      "run_id": "non-empty string",
+      "request_id": "non-empty string"
+    },
+    "missing_input_behavior": "stop and report blocked by missing local input",
+    "rejected": [
+      "implicit cloud control plane",
+      "undeclared background daemon",
+      "hidden network dependency"
+    ]
+  },
+  "allowed_resources": {
+    "read_files": [
+      "checked-in JSON run specs",
+      "checked-in docs and examples"
+    ],
+    "write_files": [
+      "declared local run_root output paths"
+    ],
+    "network": "disallowed",
+    "external_authority": "none",
+    "state_scope": "local run directory and explicit repo files only"
+  },
+  "execution_boundaries": [
+    "local-first",
+    "deterministic where the runtime contract allows",
+    "bounded recursion and bounded state",
+    "no hidden broker or second control plane",
+    "emit replayable ledger artifacts",
+    "stop and report if required input is missing"
+  ],
+  "allowed_completion_states": [
+    "completed",
+    "already complete",
+    "blocked by missing local input"
+  ],
+  "output_contract": {
+    "required_report_fields": [
+      "touched_files",
+      "completion_state",
+      "run_id",
+      "request_id",
+      "tick_limit",
+      "events_path",
+      "chain_path",
+      "validation_performed",
+      "verification_result",
+      "residual_risk"
+    ],
+    "artifacts": [
+      "events.jsonl",
+      "events.sha256"
+    ]
+  },
+  "prompt_template": "prompts/examples/local_runtime_agent.prompt.md"
+}
