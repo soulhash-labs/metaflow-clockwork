@@ -4,7 +4,7 @@
         ╔═══════════════════════════════════════════════╗
         ║   ⚙  ───────────────────────────────────  ⚙   ║
         ║                                               ║
-        ║        M E T A F L O W   C L O C K W O R K   ║
+        ║       M E T A F L O W   C L O C K W O R K     ║
         ║                                               ║
         ║   ⚙  ───────────────────────────────────  ⚙   ║
         ╚═══════════════════════════════════════════════╝
@@ -69,24 +69,24 @@ Built for teams who want to:
 ```
   ┌─────────────────────────────────────────────────────────────────────┐
   │                                                                     │
-  │   ⚙  MetaTag execution    Deterministic units that describe and    │
+  │   ⚙  MetaTag execution    Deterministic units that describe and     │
   │                            run behavior                             │
   │                                                                     │
-  │   ⚙  ClockworkEngine      Bounded recursive ticking with explicit  │
+  │   ⚙  ClockworkEngine      Bounded recursive ticking with explicit   │
   │                            depth control                            │
   │                                                                     │
-  │   ⚙  Event sinks          In-memory and append-only ledger         │
+  │   ⚙  Event sinks          In-memory and append-only ledger          │
   │                            backends                                 │
   │                                                                     │
-  │   ⚙  Run-spec validation  Validate a spec before a single tick     │
+  │   ⚙  Run-spec validation  Validate a spec before a single tick      │
   │                            fires                                    │
   │                                                                     │
-  │   ⚙  Ledger tools         Summary, replay, and verification        │
+  │   ⚙  Ledger tools         Summary, replay, and verification         │
   │                                                                     │
-  │   ⚙  CLI                  validate · spec-validate · spec-run ·    │
+  │   ⚙  CLI                  validate · spec-validate · spec-run ·     │
   │                            ledger-verify                            │
   │                                                                     │
-  │   ⚙  Prompt assets        Hygiene, template, doctrine, and role    │
+  │   ⚙  Prompt assets        Hygiene, template, doctrine, and role     │
   │                            contract examples                        │
   │                                                                     │
   └─────────────────────────────────────────────────────────────────────┘
@@ -316,7 +316,7 @@ Licensed under [Apache 2.0](./LICENSE). Trademark and branding guidance: [TRADEM
 
 ---
 
-<div align="center">
+<div align="left">
 
 ```
         ╔═══════════════════════════════════════════════╗
