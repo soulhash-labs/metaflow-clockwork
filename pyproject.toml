@@ -30,11 +30,11 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/soulhash-ai/metaflow-clockwork"
-Source = "https://github.com/soulhash-ai/metaflow-clockwork"
-Issues = "https://github.com/soulhash-ai/metaflow-clockwork/issues"
-Documentation = "https://github.com/soulhash-ai/metaflow-clockwork/tree/main/docs"
-Changelog = "https://github.com/soulhash-ai/metaflow-clockwork/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/soulhash-labs/metaflow-clockwork"
+Source = "https://github.com/soulhash-labs/metaflow-clockwork"
+Issues = "https://github.com/soulhash-labs/metaflow-clockwork/issues"
+Documentation = "https://github.com/soulhash-labs/metaflow-clockwork/tree/main/docs"
+Changelog = "https://github.com/soulhash-labs/metaflow-clockwork/blob/main/CHANGELOG.md"
 
 [project.scripts]
 metaflow-clockwork = "metaflow_clockwork.cli:main"
