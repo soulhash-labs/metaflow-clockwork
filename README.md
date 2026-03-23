@@ -10,7 +10,7 @@
         ╚═══════════════════════════════════════════════╝
 ```
 
-### deterministic local runtime for AI agents
+### Where Python code becomes conscious
 
 `self-executing tags` &nbsp;·&nbsp; `bounded recursion` &nbsp;·&nbsp; `spec-driven runs` &nbsp;·&nbsp; `append-only ledgers`
 
